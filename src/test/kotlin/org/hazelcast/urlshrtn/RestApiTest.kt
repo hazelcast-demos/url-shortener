@@ -1,11 +1,14 @@
 package org.hazelcast.urlshrtn
 
+import io.quarkus.test.common.QuarkusTestResource
+import io.quarkus.test.hazelcast.HazelcastServerTestResource
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
 import org.hamcrest.core.StringStartsWith.startsWith
 import org.junit.jupiter.api.Test
 
 @QuarkusTest
+@QuarkusTestResource(HazelcastServerTestResource::class)
 class RestApiTest {
 
     private val urlParamName = "url"
