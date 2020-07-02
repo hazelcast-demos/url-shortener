@@ -4,8 +4,10 @@ import io.quarkus.test.common.QuarkusTestResource
 import io.quarkus.test.hazelcast.HazelcastServerTestResource
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.core.StringStartsWith.startsWith
 import org.junit.jupiter.api.Test
+
 
 @QuarkusTest
 @QuarkusTestResource(HazelcastServerTestResource::class)
@@ -29,9 +31,20 @@ class RestApiTest {
             .body(startsWith(PREFIX))
     }
 
+    @Test
+    fun `GET should return the correct POST'ed mapping`() {
+        val shortened = whenPost().body.asString()
+        given()
+            .pathParam(urlParamName, shortened)
+        .`when`()
+            .get(endpoint)
+        .then()
+            .body(`is`(longUrl))
+    }
+
     private fun whenPost() =
         given()
             .pathParam(urlParamName, longUrl)
         .`when`()
             .post(endpoint)
-    }
+}
