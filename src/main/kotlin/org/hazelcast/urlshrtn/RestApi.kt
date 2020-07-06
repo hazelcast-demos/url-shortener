@@ -11,6 +11,9 @@ internal const val PREFIX = "https://hzlc.st/"
 class RestApi @Inject constructor(private val random: Random,
                                   private val client: HazelcastInstance) {
 
+    private val shorteneds
+        get() = client.getMap<String, String>("shorteneds")
+
     private val urls
         get() = client.getMap<String, String>("urls")
 
@@ -18,11 +21,10 @@ class RestApi @Inject constructor(private val random: Random,
     @Path("/{url}")
     @Produces(MediaType.TEXT_PLAIN)
     fun shorten(@PathParam("url") url: String) =
-        random
-            .string()
-            .apply {
-                urls.set(this, url)
-            }.prependIndent(PREFIX)
+        with(random.string()) {
+            shorteneds.putIfAbsent(url, this) ?: this
+        }.apply { urls.set(this, url) }
+        .prependIndent(PREFIX)
 
     @GET
     @Path("/{shortened}")
