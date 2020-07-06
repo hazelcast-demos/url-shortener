@@ -5,6 +5,7 @@ import io.quarkus.test.hazelcast.HazelcastServerTestResource
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.Matchers.emptyString
 import org.hamcrest.core.StringStartsWith.startsWith
 import org.junit.jupiter.api.Test
 
@@ -40,6 +41,21 @@ class RestApiTest {
             .get(endpoint)
         .then()
             .body(`is`(longUrl))
+    }
+
+    @Test
+    fun `DELETE should remove an existing mapping`() {
+        val shortened = whenPost().body.asString()
+        given()
+            .pathParam(urlParamName, longUrl)
+        .`when`()
+            .delete(endpoint)
+        given()
+            .pathParam(urlParamName, shortened)
+        .`when`()
+            .get(endpoint)
+        .then()
+            .body(emptyString())
     }
 
     private fun whenPost() =
