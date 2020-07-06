@@ -1,7 +1,6 @@
 package org.hazelcast.urlshrtn
 
 import com.hazelcast.core.HazelcastInstance
-import com.hazelcast.map.listener.EntryAddedListener
 import javax.inject.Inject
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -13,9 +12,9 @@ class RestApi @Inject constructor(private val random: Random,
                                   private val client: HazelcastInstance) {
 
     init {
-        shorteneds.addEntryListener(EntryAddedListener<String, String> {
+        shorteneds.addEntryAddedListener {
             urls.set(it.value, it.key)
-        }, true)
+        }
     }
 
     private val shorteneds
