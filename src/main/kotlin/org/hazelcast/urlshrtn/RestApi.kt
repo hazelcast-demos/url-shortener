@@ -36,4 +36,12 @@ class RestApi @Inject constructor(private val random: Random,
     @Produces(MediaType.TEXT_PLAIN)
     fun expand(@PathParam("shortened") shortened: String) =
         urls[shortened.removePrefix(PREFIX)]
+
+    @DELETE
+    @Path("/{url}")
+    @Produces(MediaType.TEXT_PLAIN)
+    fun remove(@PathParam("url") url: String) =
+        shorteneds.remove(url)?.apply {
+            urls.delete(this)
+        }?.prependIndent(PREFIX)
 }
