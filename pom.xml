@@ -56,10 +56,12 @@
     <dependency>
       <groupId>com.hazelcast</groupId>
       <artifactId>quarkus-hazelcast-client</artifactId>
+      <version>1.0.0-RC5</version>
     </dependency>
     <dependency>
       <groupId>com.hazelcast</groupId>
       <artifactId>quarkus-test-hazelcast</artifactId>
+      <version>1.0.0-RC5</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
